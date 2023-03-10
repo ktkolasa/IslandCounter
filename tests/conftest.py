@@ -4,5 +4,5 @@ def pytest_addoption(parser):
         action="store_true",
         dest="longrun",
         default=False,
-        help="enable longrundecorated tests",
+        help="enable longrun-decorated tests",
     )

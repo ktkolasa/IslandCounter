@@ -15,10 +15,13 @@ def do_array_check(previous_line_len, line, row):
         )
 
 
+
 def count_islands(user_input):
     """Return number of groups of 'islands' (groups of 1) among '0's"""
     if not os.path.isfile(user_input):
         raise FileNotFoundError(f"{user_input} is not a file.")
+    if not user_input.endswith('.txt'):
+        raise UserWarning(f"{user_input} is not a .txt file.")
 
     islands, previous_line_len = [], 0
     with open(user_input, "r", encoding="utf-8") as input_file:
@@ -70,3 +73,5 @@ if __name__ == "__main__":
             print(fnf, file=sys.stderr)
         except ValueError as ve:
             print(ve, file=sys.stderr)
+        except UserWarning as uw:
+            print(uw, file=sys.stderr)

@@ -16,16 +16,19 @@ The input_file.txt should consist of an array of 1 and 0, eg:
 1000100<br>
 1100000<br>
 ---
-Ways run tests:
+Ways to run tests:
 1. Uncomment line
 >#RUN pytest
 > 
-in Dockerfile.
-2. Setup and activate python virtual env and run:
+in Dockerfile. Tests will be run during build.
+
+2. Setup and activate python virtual env and run there
 >pytest
 
 or
 >make test
+3. To run full suite of tests including the ones tagged as long-running (memory-consuming), run:
+> pytest --longrun
 
 
 ---
