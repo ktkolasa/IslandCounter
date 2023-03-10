@@ -62,11 +62,11 @@ if __name__ == "__main__":
     if len(sys.argv) < 2:
         print(
             "No arguments supplied. Please pass path to the input text file.",
-            file=sys.stderr,
         )
-    try:
-        count_islands(sys.argv[1])
-    except FileNotFoundError as fnf:
-        print(fnf, file=sys.stderr)
-    except ValueError as ve:
-        print(ve, file=sys.stderr)
+    else:
+        try:
+            count_islands(sys.argv[1])
+        except FileNotFoundError as fnf:
+            print(fnf, file=sys.stderr)
+        except ValueError as ve:
+            print(ve, file=sys.stderr)
