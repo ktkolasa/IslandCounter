@@ -9,7 +9,7 @@ def is_newline(char: str) -> bool:
 def validate_cell_value(value: int):
     """
     :param value:
-    :return:
+    :raises: ValueError if cell is neither 0 nor 1
     """
     if not ord(value) in (48, 49):
         raise ValueError("Only 1 and 0 are valid chars in input file. Got ", value)
@@ -30,7 +30,7 @@ def validate_array(previous_line_len: int, line: str, row: int):
     :param previous_line_len:
     :param line:
     :param row:
-    :return:
+    :raises: ValueError if input file is not an array
     """
     if len(line) and len(line) != previous_line_len and is_newline(line[-1]):
         raise ValueError(
