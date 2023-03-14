@@ -1,51 +1,40 @@
 import os
 import sys
+from cell_validation import is_island, is_newline, cell_neighbours_are_island,\
+    validate_array, validate_cell_value
 
 
-def is_newline_char(char):
-    return ord(char) == 10
-
-
-def do_array_check(previous_line_len, line, row):
-    """Check if two subsequent non-empty lines are of different length.
-    If not, raise an exception."""
-    if len(line) and len(line) != previous_line_len and is_newline_char(line[-1]):
-        raise ValueError(
-            f"Input file is not an array, line {row + 1} varies in length."
-        )
-
-
-def count_islands(user_input):
-    """Return number of groups of 'islands' (groups of 1) among '0's"""
+def validate_file(user_input: str) -> bool:
+    """
+    :param user_input:
+    :return:
+    """
     if not os.path.isfile(user_input):
         raise FileNotFoundError(f"{user_input} is not a file.")
     if not user_input.endswith(".txt"):
         raise UserWarning(f"{user_input} is not a .txt file.")
+    return True
 
+
+def count_islands(user_input: str) -> int:
+    """Return number of groups of 'islands' (groups of 1) among '0's"""
     islands, previous_line_len = [], 0
     with open(user_input, "r", encoding="utf-8") as input_file:
         for row, line in enumerate(input_file):
             if not previous_line_len:
                 previous_line_len = len(line)
-            do_array_check(previous_line_len, line, row)
-
+            validate_array(previous_line_len, line, row)
             for col, cell_value in enumerate(line):
-                if is_newline_char(cell_value):
+                if is_newline(cell_value):
                     break
-                if ord(cell_value) not in (48, 49):
-                    raise ValueError(
-                        "Only 1 and 0 are valid chars in input file. Got ", cell_value
-                    )
-
-                if int(cell_value) == 1:
-                    adjacent_island = {}
+                validate_cell_value(cell_value)
+                if is_island(cell_value):
+                    adjacent_island = set()
                     if not islands:
                         islands.append({(col, row)})
                         continue
                     for island in islands:
-                        # if cell to the left or cell above current cell
-                        # are already a part of an island, add curr cell to that island
-                        if not {(col - 1, row), (col, row - 1)}.isdisjoint(island):
+                        if cell_neighbours_are_island(col, row, island):
                             island.add((col, row))
                             # if this there is already an adjacent island, merge them
                             if adjacent_island:
@@ -67,10 +56,7 @@ if __name__ == "__main__":
         )
     else:
         try:
+            validate_file(sys.argv[1])
             count_islands(sys.argv[1])
-        except FileNotFoundError as fnf:
-            print(fnf, file=sys.stderr)
-        except ValueError as ve:
-            print(ve, file=sys.stderr)
-        except UserWarning as uw:
-            print(uw, file=sys.stderr)
+        except (FileNotFoundError, ValueError, UserWarning) as e:
+            print(e, file=sys.stderr)
